@@ -1,12 +1,16 @@
 using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 public class Gravity : MonoBehaviour
 {
     Rigidbody rb;
     const float G = 0.006674F;
 
     public static List<Gravity> otherObjectsList;
+
+    [SerializeField] bool planet = false;
+    [SerializeField] int orbitSpeed = 1000;
     private void Awake()
     {
       rb = GetComponent<Rigidbody>();
@@ -16,7 +20,13 @@ public class Gravity : MonoBehaviour
             otherObjectsList = new List<Gravity>();
         }
         otherObjectsList.Add(this);
+        
+        if (!planet)
+        {
+            rb.AddForce(Vector3.left * orbitSpeed);
+        }
     }
+   
     private void FixedUpdate()
     {
         foreach (Gravity obj in otherObjectsList)
